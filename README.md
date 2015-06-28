@@ -2,12 +2,15 @@
 
 "Blinker" is actually a german word and it reffers to that blinking light on a car or motorcycle with which you indicate which direction you are going to take. And that is what thi smodule does; you tell it how to cache, and it will direct your browser!
 
-## Usage
+## Install
 
+    npm install express-blinker
+
+## Usage
 ```javascript
 var express = require("express"),
     app = express(),
-    blinker = require("blinker"),
+    blinker = require("express-blinker"),
     path = require("path"),
     basePath = path.join(__dirname, "public");
 
@@ -17,7 +20,7 @@ app.use(blinker(basePath, [
         etag: true,
         lastModified: false,
         cacheControl: true,
-        expires: true,
+        expires: false,
         age: 600
     }
 ]));

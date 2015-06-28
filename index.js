@@ -17,7 +17,7 @@ function checkLastModified(data, cb) {
     // Skip!
     if(data._changed) return cb(null, data);
 
-    if("if-none-modified" in data.req.headers) {
+    if("if-modified-since" in data.req.headers) {
         fs.stat(data.file, function(err, stats) {
             if(err) return cb(err, data);
             data.stats = stats;
