@@ -3,6 +3,7 @@ var path = require("path");
 var MD5 = require("md5-file");
 var async = require("async");
 var mime = require("mime");
+var debug = require("debug")("express-blinker");
 
 function getTimedDateString(target) {
     var now = (typeof target != "undefined" ?
@@ -104,7 +105,7 @@ function makeETag(data, cb) {
         etag: false
     }
 ] */
-module.exports = function(basePath, confs) {
+module.exports = function Blinker(basePath, confs) {
     return function(req, res, next) {
         // Search for a fitting set of options...
         var options;
@@ -117,8 +118,25 @@ module.exports = function(basePath, confs) {
             }
         }
 
-        fs.exists(basePath + req.url, function(it_exists){
-            if(it_exists) {
+        var filePath = basePath + req.url;
+        async.series({
+            fileExists: function fileExists(cb) {
+                fs.exists(filePath, function(exists){
+                    if(exists) cb(null, exists);
+                    else cb(new Error(filePath+" does not exist."));
+                });
+            },
+            isFile: function isFile(cb) {
+                fs.stat(filePath, function(err, stats){
+                    if(stats.isFile()) cb(null, true);
+                    else cb(new Error("Not a file."));
+                });
+            }
+        }, function(err, res){
+            if(err) {
+                debug(err);
+                next();
+            } else {
                 var wave = [];
 
                 // Add checks
