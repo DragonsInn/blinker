@@ -1,6 +1,6 @@
 {
   "name": "express-blinker",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Middleware to serve static files with proper cache headers.",
   "main": "index.js",
   "scripts": {
