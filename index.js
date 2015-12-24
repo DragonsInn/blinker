@@ -132,7 +132,7 @@ module.exports = function Blinker(basePath, confs) {
                     else cb(new Error("Not a file."));
                 });
             }
-        }, function(err, res){
+        }, function(err){
             if(err) {
                 debug(err);
                 next();
@@ -145,10 +145,17 @@ module.exports = function Blinker(basePath, confs) {
                 wave.push(checkSanity);
 
                 // Add makers
-                if(options.expires) wave.push(makeExpires);
-                if(options.cacheControl) wave.push(makeCacheControl);
-                if(options.lastModified) wave.push(makeLastModified);
-                if(options.etag) wave.push(makeETag);
+                if(options.expires)
+                    wave.push(makeExpires);
+
+                if(options.cacheControl)
+                    wave.push(makeCacheControl);
+
+                if(options.lastModified)
+                    wave.push(makeLastModified);
+
+                if(options.etag)
+                    wave.push(makeETag);
 
                 var runner = async.seq.apply(async.seq, wave);
                 var data = {
